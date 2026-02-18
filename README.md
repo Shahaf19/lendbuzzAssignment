@@ -23,12 +23,18 @@ Missing columns are added automatically via `ALTER TABLE` before upserting.
 python scripts/ingest.py data/raw/cars_data_3.csv
 ```
 
+## 2. Data Transformation
+
+### 2.a. dbt Setup
+Initialized a dbt project (`lendbuzz_dbt`) with the DuckDB adapter. The `profiles.yml` is stored inside the repo and points to the existing DuckDB database.
+
+
 ## Time Log
 | Task | Time Spent |
 |------|------------|
 | 1.a. Initialization | 2 hours |
 | 1.b. Upsert | 45 min |
 | 1.c. Schema Change | 25 min |
-| 2.a. dbt Setup | |
+| 2.a. dbt Setup | 1.5 hours |
 | 2.b. Data Modeling | |
 | 2.c. Data Testing | |

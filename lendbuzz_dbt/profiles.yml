@@ -1,0 +1,7 @@
+lendbuzz_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: ../data/db/Cars_Inventory.duckdb
+      threads: 1
