@@ -15,12 +15,20 @@ Refactored the script to accept a CSV path as argument and support upsert logic 
 ```bash
 python scripts/ingest.py data/raw/cars_data_2.csv
 ```
+
+### 1.c Schema Change
+Refactored the script to detect new columns in the CSV that don't exist in the table.
+Missing columns are added automatically via `ALTER TABLE` before upserting.
+```bash
+python scripts/ingest.py data/raw/cars_data_3.csv
+```
+
 ## Time Log
 | Task | Time Spent |
 |------|------------|
 | 1.a. Initialization | 2 hours |
 | 1.b. Upsert | 45 min |
-| 1.c. Schema Change | |
+| 1.c. Schema Change | 25 min |
 | 2.a. dbt Setup | |
 | 2.b. Data Modeling | |
 | 2.c. Data Testing | |

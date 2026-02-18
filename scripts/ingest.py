@@ -6,21 +6,29 @@ DB_PATH = 'data/db/Cars_Inventory.duckdb'
 TABLE_NAME = "car_inventory"
 
 def ingest_csv(con, csv_path, table_name):
-    """Upsert CSV data into DuckDB table using VIN as the primary key."""
+    """Upsert CSV data into DuckDB table using VIN as the primary key.
+    Handles schema changes by adding new columns automatically."""
     if not os.path.exists(csv_path):
         raise FileNotFoundError(f"CSV file not found: {csv_path}")
-    
+
     # Check if the table exists
     table_exists = con.sql(
         f"SELECT count(*) FROM information_schema.tables WHERE table_name = '{table_name}'"
-        ).fetchone()[0] > 0
+    ).fetchone()[0] > 0
 
     if not table_exists:
         con.sql(f"CREATE TABLE {table_name} AS SELECT * FROM read_csv_auto('{csv_path}')")
-
-    # Deleting the potentially outdated records and replace them with recentcd
     else:
         con.sql(f"CREATE TEMP TABLE staging AS SELECT * FROM read_csv_auto('{csv_path}')")
+
+        table_cols = set(con.sql(f"DESCRIBE {table_name}").fetchdf()['column_name'])
+        staging_cols = set(con.sql("DESCRIBE staging").fetchdf()['column_name'])
+         # Add new columns from CSV that don't exist in the table
+        for col in staging_cols - table_cols:
+            col_type = con.sql(f"SELECT typeof({col}) FROM staging LIMIT 1").fetchone()[0]
+            con.sql(f"ALTER TABLE {table_name} ADD COLUMN {col} {col_type}")
+
+        # Upsert: delete matching VINs, then insert
         con.sql(f"DELETE FROM {table_name} WHERE vin IN (SELECT vin FROM staging)")
         con.sql(f"INSERT INTO {table_name} SELECT * FROM staging")
         con.sql("DROP TABLE staging")
