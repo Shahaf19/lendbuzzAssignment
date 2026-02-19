@@ -3,5 +3,5 @@ lendbuzz_dbt:
   outputs:
     dev:
       type: duckdb
-      path: ../data/db/Cars_Inventory.duckdb
+      path: ../data/db/Car_Inventory.duckdb
       threads: 1

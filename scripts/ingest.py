@@ -2,7 +2,7 @@ import argparse
 import duckdb
 import os
 
-DB_PATH = 'data/db/Cars_Inventory.duckdb'
+DB_PATH = 'data/db/Car_Inventory.duckdb'
 TABLE_NAME = "car_inventory"
 
 def ingest_csv(con, csv_path, table_name):
@@ -21,8 +21,8 @@ def ingest_csv(con, csv_path, table_name):
     else:
         con.sql(f"CREATE TEMP TABLE staging AS SELECT * FROM read_csv_auto('{csv_path}')")
 
-        table_cols = set(con.sql(f"DESCRIBE {table_name}").fetchdf()['column_name'])
-        staging_cols = set(con.sql("DESCRIBE staging").fetchdf()['column_name'])
+        table_cols = set(row[0] for row in con.sql(f"DESCRIBE {table_name}").fetchall())
+        staging_cols = set(row[0] for row in con.sql("DESCRIBE staging").fetchall())
          # Add new columns from CSV that don't exist in the table
         for col in staging_cols - table_cols:
             col_type = con.sql(f"SELECT typeof({col}) FROM staging LIMIT 1").fetchone()[0]

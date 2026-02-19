@@ -4,6 +4,17 @@
 This project implements a local data platform using Python and DuckDB for data ingestion, and dbt for transformations. The goal is to process car inventory data through various stages of schema changes and updates.
 
 
+## Setup
+```bash
+# Create and activate virtual environment
+python -m venv env
+source env/Scripts/activate   # Windows (Git Bash)
+# source env/bin/activate     # Linux/Mac
+
+# Install dependencies
+pip install -r requirements.txt
+```
+
 ## 1. Data Ingestion
 
 ### 1.a. Initialization
@@ -36,5 +47,5 @@ Initialized a dbt project (`lendbuzz_dbt`) with the DuckDB adapter. The `profile
 | 1.b. Upsert | 45 min |
 | 1.c. Schema Change | 25 min |
 | 2.a. dbt Setup | 1.5 hours |
-| 2.b. Data Modeling | |
+| 2.b. Data Modeling | 2 hours |
 | 2.c. Data Testing | |

@@ -1,0 +1,6 @@
+sources:
+  - name: Car_Inventory
+    database: Car_Inventory
+    schema: main
+    tables:
+      - name: car_inventory
