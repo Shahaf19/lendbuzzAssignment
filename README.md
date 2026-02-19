@@ -39,6 +39,12 @@ python scripts/ingest.py data/raw/cars_data_3.csv
 ### 2.a. dbt Setup
 Initialized a dbt project (`lendbuzz_dbt`) with the DuckDB adapter. The `profiles.yml` is stored inside the repo and points to the existing DuckDB database.
 
+### 2.b. Data Modeling & Testing
+```bash
+cd lendbuzz_dbt
+dbt run
+dbt test
+```
 
 ## Time Log
 | Task | Time Spent |
@@ -48,4 +54,4 @@ Initialized a dbt project (`lendbuzz_dbt`) with the DuckDB adapter. The `profile
 | 1.c. Schema Change | 25 min |
 | 2.a. dbt Setup | 1.5 hours |
 | 2.b. Data Modeling | 2 hours |
-| 2.c. Data Testing | |
+| 2.c. Data Testing | 30 min |

@@ -23,7 +23,7 @@ def ingest_csv(con, csv_path, table_name):
 
         table_cols = set(row[0] for row in con.sql(f"DESCRIBE {table_name}").fetchall())
         staging_cols = set(row[0] for row in con.sql("DESCRIBE staging").fetchall())
-         # Add new columns from CSV that don't exist in the table
+        # Add new columns from CSV that don't exist in the table
         for col in staging_cols - table_cols:
             col_type = con.sql(f"SELECT typeof({col}) FROM staging LIMIT 1").fetchone()[0]
             con.sql(f"ALTER TABLE {table_name} ADD COLUMN {col} {col_type}")
@@ -38,8 +38,14 @@ def ingest_csv(con, csv_path, table_name):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("csv_path")
+    parser.add_argument(
+        "csv_path",
+        nargs="?",
+        help="Path to the CSV file (example: data/raw/cars_data_1.csv)",
+    )
     args = parser.parse_args()
+
+    os.makedirs(os.path.dirname(DB_PATH), exist_ok=True)
 
     con = duckdb.connect(DB_PATH)
     try:
