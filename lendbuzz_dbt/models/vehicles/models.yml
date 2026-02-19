@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: all_cars
+    description: All car inventory records from source
+    columns:
+      - name: vin
+        data_tests:
+          - unique
+          - not_null
+      - name: price
+        data_tests:
+          - not_null
+      - name: brand
+        data_tests:
+          - not_null
+      - name: year
+        data_tests:
+          - not_null
+      - name: mileage
+        data_tests:
+          - not_null
+      - name: title_status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['clean vehicle', 'salvage insurance']
+
+  - name: brand_model_stats
+    description: Aggregated statistics per brand and model
+    columns:
+      - name: brand
+        data_tests:
+          - not_null
+      - name: model
+        data_tests:
+          - not_null
+    data_tests:
+      - unique:
+          column_name: "(brand || '-' || model)"
+
+  - name: high_value_cars
+    description: Top 10th percentile cars by price within each year
+    columns:
+      - name: vin
+        data_tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('all_cars')
+                field: vin
+      - name: year_price_percentile
+        data_tests:
+          - not_null
